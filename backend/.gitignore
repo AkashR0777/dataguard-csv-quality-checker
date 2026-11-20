@@ -1,0 +1,30 @@
+    # Python virtual environments
+.venv/
+.venv312/
+venv/
+
+# Python cache and testing
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+.aws/
+credentials
+*.pem
+*.key
+
+# AWS SAM generated files
+.aws-sam/
+samconfig.toml
+
+# Editor and operating system files
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Generated deployment and test files
+packaged.yaml

@@ -1,0 +1,4 @@
+employee_id,name,age,salary,email
+1001,Ada Lovelace,,125000,ada@example.com
+1002,Grace Hopper,not-a-number,-50,grace@example.com
+1002,Grace Hopper,not-a-number,-50,grace@example.com

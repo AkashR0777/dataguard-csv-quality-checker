@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DataGuard | CSV Data Quality Checker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="DataGuard home">
+      <span class="brand-mark" aria-hidden="true">◆</span>
+      <span class="brand-name">DataGuard</span>
+      <span class="brand-subtitle">CSV Data Quality Checker</span>
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="#home">Home</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="#sample-files">Sample Files</a>
+      <a href="#about">About</a>
+    </nav>
+    <button class="theme-button" type="button" aria-label="Toggle color theme">☼</button>
+  </header>
+
+  <main id="home">
+    <section class="hero shell">
+      <div class="hero-copy">
+        <p class="eyebrow">AUTOMATED DATA QUALITY</p>
+        <h1>Upload CSV. <span>Get Insights.</span></h1>
+        <p class="hero-text">Automatically check your CSV files for missing values, duplicate records, invalid data types and more. Fast, simple and powered by AWS.</p>
+        <div class="highlights">
+          <div class="highlight"><span class="highlight-icon green">ϟ</span><div><strong>Automatic Validation</strong><small>Upload and get results in seconds</small></div></div>
+          <div class="highlight"><span class="highlight-icon purple">▮</span><div><strong>Detailed Reports</strong><small>See exactly what's wrong</small></div></div>
+          <div class="highlight"><span class="highlight-icon blue">✓</span><div><strong>Secure &amp; Reliable</strong><small>Built on AWS serverless services</small></div></div>
+        </div>
+      </div>
+      <div class="hero-illustration" aria-hidden="true">
+        <div class="file-icon"><span>CSV</span></div><div class="arrow">→</div>
+        <div class="mini-report"><span class="check">✓</span><i></i><i></i><i class="short"></i><b></b><i></i><i class="short"></i></div>
+      </div>
+    </section>
+
+    <section class="dashboard shell">
+      <article class="card upload-card">
+        <h2><span class="section-icon">↥</span> 1. Upload CSV File</h2>
+        <div class="drop-zone" id="drop-zone" tabindex="0" role="button" aria-label="Choose a CSV file">
+          <div class="upload-cloud">☁</div>
+          <p>Drag and drop your CSV file here</p><span>or</span>
+          <button class="primary-button" id="choose-file" type="button">Choose File</button>
+          <input id="file-input" type="file" accept=".csv,text/csv" hidden>
+          <p class="selected-file" id="selected-file" hidden></p>
+        </div>
+        <p class="helper">Max file size: 10 MB <b>|</b> Supported format: .csv</p>
+        <div class="upload-actions" id="upload-actions" hidden>
+          <button class="primary-button" id="upload-file" type="button">Upload file</button>
+          <button class="secondary-button" id="remove-file" type="button">Remove</button>
+        </div>
+        <div class="progress" id="upload-progress" hidden><span></span></div>
+        <p class="message" id="upload-message" role="status"></p>
+      </article>
+
+      <article class="card status-card">
+        <h2><span class="section-icon">▣</span> 2. Processing Status</h2>
+        <ol class="timeline" id="timeline">
+          <li class="complete"><span>✓</span><div><strong>File Uploaded</strong><small>Waiting for a file</small></div></li>
+          <li><span>✓</span><div><strong>Validation Started</strong><small>Will begin after upload</small></div></li>
+          <li><span>•</span><div><strong>Processing...</strong><small>Analyzing data quality</small></div></li>
+          <li><span>•</span><div><strong>Completed</strong><small>Results will be shown here</small></div></li>
+        </ol>
+      </article>
+
+      <article class="card summary-card">
+        <h2><span class="section-icon">▥</span> 3. Validation Summary</h2>
+        <div class="metrics">
+          <div><span class="metric-icon purple">▤</span><small>Total Records</small><strong id="total-records">—</strong></div>
+          <div><span class="metric-icon red">▲</span><small>Missing Values</small><strong class="bad" id="missing-values">—</strong></div>
+          <div><span class="metric-icon yellow">▣</span><small>Duplicate Rows</small><strong class="warn" id="duplicate-rows">—</strong></div>
+          <div><span class="metric-icon pink">×</span><small>Invalid Values</small><strong class="bad" id="invalid-values">—</strong></div>
+        </div>
+        <div class="score-box"><div><strong>Overall Data Quality Score</strong><span>ⓘ</span></div><div class="score-row"><div class="score-ring" id="score-ring"><strong id="quality-score">—</strong></div><div class="legend"><span><i class="valid-dot"></i>Valid Records <b id="valid-percent">—</b></span><span><i class="issue-dot"></i>Issues Found <b id="issue-percent">—</b></span></div></div></div>
+      </article>
+
+      <article class="card issues-card">
+        <h2><span class="section-icon red-text">▲</span> 4. Detailed Issues <span class="issue-total" id="issue-total"></span></h2>
+        <div class="tabs" role="tablist">
+          <button class="active" data-filter="ALL">All issues <span id="all-count">(0)</span></button>
+          <button data-filter="MISSING_VALUE">Missing Values <span id="missing-count">(0)</span></button>
+          <button data-filter="DUPLICATE_ROW">Duplicate Rows <span id="duplicate-count">(0)</span></button>
+          <button data-filter="INVALID_VALUE">Invalid Values <span id="invalid-count">(0)</span></button>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>Row Number</th><th>Column Name</th><th>Issue Type</th><th>Value</th><th>Description</th></tr></thead><tbody id="issues-body"><tr><td colspan="5" class="empty">Upload a CSV file to see validation issues.</td></tr></tbody></table></div>
+      </article>
+
+      <aside class="side-column">
+        <article class="card actions-card"><h2><span class="section-icon">⇩</span> 5. Download &amp; Actions</h2><button class="primary-button full" id="download-report" type="button" disabled>⇩ &nbsp; Download JSON Report</button><button class="secondary-button full" id="view-file" type="button" disabled>↗ &nbsp; View Original File</button></article>
+        <article class="card info-card"><h2><span class="section-icon">▣</span> File Information</h2><dl><div><dt>File Name</dt><dd id="file-name">—</dd></div><div><dt>File Size</dt><dd id="file-size">—</dd></div><div><dt>Uploaded At</dt><dd id="uploaded-at">—</dd></div><div><dt>Processed At</dt><dd id="processed-at">—</dd></div><div><dt>Status</dt><dd><span class="status-pill" id="file-status">Waiting</span></dd></div></dl></article>
+      </aside>
+    </section>
+  </main>
+  <footer id="about"><span>DataGuard</span> · Automated CSV Data Quality Checker</footer>
+  <script src="config.js"></script><script src="script.js"></script>
+</body>
+</html>
